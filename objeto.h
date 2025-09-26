@@ -2,7 +2,7 @@
 ============================================================
   Fichero: objeto.h
   Creado: 25-09-2025
-  Ultima Modificacion: dijous, 25 de setembre de 2025, 20:48:31
+  Ultima Modificacion: vie 26 sep 2025 12:16:03
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -29,12 +29,12 @@ typedef signed short i2;
 typedef struct {
 	char nombre[NOMLEN];
 	u1 tipo;
-	i2 x,y;
+	u2 x,y;
 	union {
 		u2 valor;
 		struct {
 			u1 subtipo;
-			u2 plus;
+			u1 plus;
 		};
 	};
 } Objeto;
@@ -45,8 +45,15 @@ extern Objeto objeto[OBJETOS];
 Objeto* obj_new(char* nombre);
 //define un nuevo objeto
 
+void obj_pur(Objeto* o);
+//envia el objeto al purgatorio
+
 void obj_rnd_pos(Objeto* o);
 //da posicion aleatoria en el mapa
+
+void obj_prt(Objeto* o);
+//imprime y describe un objeto
+		
 
 #endif //OBJETO_H
 

@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: dijous, 25 de setembre de 2025, 20:44:48
+  Ultima Modificacion: vie 26 sep 2025 12:16:03
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -18,18 +18,33 @@ Psi* psi_new(char* n) {
 		psis++;
 		strcpy(p->nombre,n);
 		psi->contenidos=0;
+		psi->oro=0;
 		return p;
 	}
 	return NULL;
 }
 
 u1 psi_ins_obj(Psi* p,Objeto* o) {
-	if(o->x==p->x && o->y==p->y && p->contenidos<p->capacidad) {
-		o->x=o->y=-1;
-		p->contenido[p->contenidos++]=o;
+	if(p->contenidos<p->capacidad) {
+		obj_pur(o);
+		if(o->tipo==ARMA) {
+			p->contenido[p->contenidos++]=o;
+		} else {
+			p->oro+=o->valor;
+		}	
 		return 1;
 	}
 	return 0;
+}
+
+u1 psi_cog_obj(Psi* p,Objeto* o) {
+	if(o->x==p->x && o->y==p->y) return psi_ins_obj(p,o);
+	return 0;
+}
+
+void psi_pur(Psi* p) {
+	p->x=MAPW;
+	p->y=MAPH;
 }
 
 void psi_rnd_pos(Psi* p) {
