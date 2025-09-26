@@ -2,7 +2,7 @@
 ============================================================
   Fichero: mapa.c
   Creado: 25-09-2025
-  Ultima Modificacion: jue 25 sep 2025 12:26:12
+  Ultima Modificacion: dijous, 25 de setembre de 2025, 20:31:01
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -22,28 +22,33 @@ static void adv(u1 dir,int* x,int* y) {
 	*y=(dir==SUR)?*y+1:*y;
 }
 
+static u1 decide(u2 x,u2 y) {
+	if(x==MAPW-1 && y==MAPH-1) return 0;
+	if(x==MAPW-1) return SUR;
+	else if(y==MAPH-1) return ESTE;
+	else return (rand()%2)?SUR:ESTE;
+}
+
 static void way_new(u2 x,u2 y) {
 	Way w={0,x,y};
 	int px,py;
 	px=x;
 	py=y;
-	u1 stop=0;
-	printf("Camino\n");//dbg
-	while(!stop) {
-		if(px>=0 && px<MAPW && py>=0 && py<MAPH && map[px][py]==0) {
-			u1 dir=(rand()%2)?SUR:ESTE;
-			printf("%i,%i [%i]->",px,py,dir);//dbg
+	while(1) {
+		u1 dir=decide(px,py);
+		if(dir) {
 			w.d[w.l++]=dir;
 			adv(dir,&px,&py);
-		} else stop=1;
+			if(map[px][py]!=0) break;
+		} else break;
 	}
-	printf("\n");//dbg
 	px=x;
 	py=y;
 	for(u2 n=0;n<w.l;n++) {
-		map[px][py]|=w.d[n];
+		u1 dir=w.d[n];
+		map[px][py]|=dir;
 		adv(w.d[n],&px,&py);
-		map[px][py]|=(8/w.d[n]);
+		map[px][py]|=(8/dir);
 	}
 }
 
@@ -69,11 +74,4 @@ void map_prt() {
 	}
 }
 
-//prueba
-
-int main() {
-	map_ini();
-	map_prt();
-	return 0;
-}
 

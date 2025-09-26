@@ -82,6 +82,6 @@ check:
 #MAKEFILE VARIABLE
 
 NAME = aventura 
-SCRS = mapa.c
+SCRS = mapa.c objeto.c psi.c protagonista.c
 INCLUDES = #-lX11
 
