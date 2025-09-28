@@ -2,7 +2,7 @@
 ============================================================
   Fichero: objeto.h
   Creado: 25-09-2025
-  Ultima Modificacion: vie 26 sep 2025 12:16:03
+  Ultima Modificacion: diumenge, 28 de setembre de 2025, 08:56:51
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -10,32 +10,36 @@
 #ifndef OBJETO_H
 #define OBJETO_H
 
-#include <string.h>
-
 #include "mapa.h"
 
 #define TESORO 1
 #define ARMA 2
+#define LLAVE 3
+#define MAPA 4
 
 #define ATAQUE 1
-#define DEFENSA 1
+#define DEFENSA 2
+
+#define NADA 0
+#define SALIDA 1
+#define TIENDA 2
 
 #define OBJETOS 100
-
-#define NOMLEN 32
 
 typedef signed short i2;
 
 typedef struct {
-	char nombre[NOMLEN];
+	u2 nombre;
 	u1 tipo;
 	u2 x,y;
 	union {
-		u2 valor;
-		struct {
+		u2 valor; //tesoro
+		struct { //arma
 			u1 subtipo;
 			u1 plus;
-		};
+			u1 duracion;
+		}; 
+		u1 lugar; //llave
 	};
 } Objeto;
 
@@ -53,6 +57,12 @@ void obj_rnd_pos(Objeto* o);
 
 void obj_prt(Objeto* o);
 //imprime y describe un objeto
+
+void llav_ini();
+//inicia todas las llaves (3)
+
+void pla_ini();
+//inicia el mapa
 		
 
 #endif //OBJETO_H

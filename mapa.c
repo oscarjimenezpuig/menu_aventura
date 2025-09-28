@@ -2,7 +2,7 @@
 ============================================================
   Fichero: mapa.c
   Creado: 25-09-2025
-  Ultima Modificacion: dijous, 25 de setembre de 2025, 20:31:01
+  Ultima Modificacion: diumenge, 28 de setembre de 2025, 09:22:18
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -65,13 +65,42 @@ void map_ini() {
 	}
 }
 
-void map_prt() {
-	for(u2 y=0;y<MAPH;y++) {
-		for(u2 x=0;x<MAPW;x++) {
-			printf("%02i ",map[x][y]);
+void map_prt(u2 px,u2 py) {
+	const u2 PLW=MAPW*3;
+	const u2 PLH=MAPH*3;
+	u1 malla[PLW][PLH];
+	for(u2 i=0;i<=PLW;i++) {
+		for(u2 j=0;j<PLH;j++) {
+			malla[i][j]=0;
 		}
-		printf("\n");
+	}
+	for(u2 x=0;x<MAPW;x++) {
+		for(u2 y=0;y<MAPH;y++) {
+			u1 he=map[x][y];
+			if(he & VISIT) {
+				malla[3*x+1][3*y+1]=(px==x && py==y)?2:1;
+				if(he & NORTE) malla[3*x+1][3*y]=1;
+				if(he & SUR) malla[3*x+1][3*y+2]=1;
+				if(he & ESTE) malla[3*x+2][3*y+1]=1;
+				if(he & OESTE) malla[3*x][3*y+1]=1;
+			}
+		}
+	}
+	for(u2 j=0;j<PLH;j++) {
+		printf("\t");
+		for(u2 i=0;i<PLW;i++) {
+			u1 vm=malla[i][j];
+			if(vm) {
+				char c=(vm==1)?' ':'*';
+				printf("\033[7m%c",c);
+			} else printf("\033[0m ");
+		}
+		puts("");
 	}
 }
+
+
+
+
 
 

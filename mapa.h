@@ -2,7 +2,7 @@
 ============================================================
   Fichero: mapa.h
   Creado: 25-09-2025
-  Ultima Modificacion: jue 25 sep 2025 12:17:07
+  Ultima Modificacion: diumenge, 28 de setembre de 2025, 09:21:57
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "nombres.h"
+
 #define MAPW 3
 #define MAPH 3
 
@@ -22,13 +24,12 @@
 #define OESTE 2
 #define ESTE 4
 
-typedef unsigned char u1;
-typedef unsigned short u2;
+#define VISIT 128
 
 extern u1 map[MAPW][MAPH];
 
 void map_ini();
 
-void map_prt();
+void map_prt(u2 x,u2 y);
 
 #endif //MAPA_H
