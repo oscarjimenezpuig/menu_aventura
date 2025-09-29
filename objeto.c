@@ -2,7 +2,7 @@
 ============================================================
   Fichero: objeto.c
   Creado: 25-09-2025
-  Ultima Modificacion: lun 29 sep 2025 12:04:30
+  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:03:35
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -80,8 +80,15 @@ typedef struct {
 
 static void tarm_def_one(TipoArma t) {
 	u2 code;
-	nom_new(t.nombre,&code);
+	u1 cuenta=1;
 	for(u1 k=0;k<t.cantidad;k++) {
+		if(t.cantidad>1) {
+			Nombre n;
+			sprintf(n,"%s #%i",t.nombre,cuenta++);
+			nom_new(n,&code);
+		} else {
+			nom_new(t.nombre,&code);
+		}
 		Objeto* o=obj_new(code);
 		o->tipo=ARMA;
 		o->subtipo=t.subtipo;
@@ -103,10 +110,12 @@ static void tes_def() {
 	const u2 COFRES=50;
 	const u2 ORPCO=ORO/COFRES;
 	u2 oro=ORO;
-	Nombre n="Cofre";
+	u2 cuenta=1;
 	u2 code;
-	nom_new(n,&code);
 	while(oro) {
+		Nombre n;
+		sprintf(n,"Cofre #%i",cuenta++);
+		nom_new(n,&code);
 		u2 oec=(rand()% ORPCO)+ORPCO;
 		oro-=ORPCO;
 		Objeto* o=obj_new(code);

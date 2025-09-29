@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: lun 29 sep 2025 12:19:59
+  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:14:15
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -130,7 +130,7 @@ u1 psi_atak(Psi* a,Psi* b) {
 	Objeto* arb=arma(b,DEFENSA);
 	u1 bb=b->fuerza+((arb!=NULL)?arb->plus:0);
 	u1 total=aa+bb;
-	u1 dados=rand()%total;
+	u1 dados=(total==0)?0:rand()%total;
 	if(dados<aa) {
 		printf("El ataque de %s es bueno...\n",nombre[a->nombre]);
 		u1 golpeo=aa-dados;
@@ -178,7 +178,7 @@ u1 psi_atak(Psi* a,Psi* b) {
 
 static u1 psi_huir_uno(Psi* a,Psi* b) {
 	u1 total=a->habilidad+b->habilidad;
-	u1 dados=rand()%total;
+	u1 dados=(total==0)?0:rand()%total;
 	return dados<=a->habilidad;
 }
 

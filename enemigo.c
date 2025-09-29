@@ -2,7 +2,7 @@
 ============================================================
   Fichero: enemigo.c
   Creado: 27-09-2025
-  Ultima Modificacion: lun 29 sep 2025 14:29:03
+  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:06:11
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -88,12 +88,17 @@ typedef struct {
 } Raza;
 
 static void raza_new(Raza r) {
-	u2 nn;
-	nom_new(r.nombre,&nn);
+	u2 code;
+	u1 cuenta=1;
 	for(u1 k=0;k<r.cantidad;k++) {
+		if(r.cantidad>1) {
+			Nombre n;
+			sprintf(n,"%s #%i",r.nombre,cuenta++);
+			nom_new(n,&code);
+		} else nom_new(r.nombre,&code);
 		u1 dif=9-r.vida_minima;
 		u1 vida=(dif==0)?r.vida_minima:(r.vida_minima)+rand()%dif;
-		Psi* p=ene_new(nn,vida);
+		Psi* p=ene_new(code,vida);
 		p->fuerza=r.fuerza;
 		p->habilidad=r.habilidad;
 		p->capacidad=r.capacidad;

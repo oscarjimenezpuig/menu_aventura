@@ -2,7 +2,7 @@
 ============================================================
   Fichero: protagonista.c
   Creado: 25-09-2025
-  Ultima Modificacion: lun 29 sep 2025 12:08:26
+  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:26:04
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -150,7 +150,7 @@ static u1 prot_cog() {
 			}
 		}
 		if(items) {
-			u1 nr=menu_use(mc);
+			u1 nr=(items==1)?0:menu_use(mc);
 			Objeto* oe=objeto+iitem[nr];
 			psi_ins_obj(protagonista,oe);
 			if(oe->tipo!=TESORO) puts("Cogido...");
@@ -176,7 +176,7 @@ static u1 prot_dej() {
 		for(u1 n=0;n<cs;n++) {
 			menu_ins(&md,nombre[protagonista->contenido[n]->nombre]);
 		};
-		u1 nr=menu_use(md);
+		u1 nr=(cs==1)?0:menu_use(md);
 		Objeto* od=protagonista->contenido[nr];
 		psi_dej_obj(protagonista,od);
 		puts("Dejado...");
@@ -437,7 +437,7 @@ static u1 menu_e_atacar(u1 enes,Psi* ene[]) {
 	for(u1 k=0;k<enes;k++) {
 		menu_ins(&mea,nombre[ene[k]->nombre]);
 	}
-	u1 rp=menu_use(mea);
+	u1 rp=(enes==1)?0:menu_use(mea);
 	return psi_atak(protagonista,ene[rp]);
 }
 
@@ -474,7 +474,7 @@ static u1 prot_enc_ene() {
 	Psi* ene[psis];
 	u1 enes=enemigos_find(ene);
 	if(enes>1) {
-		for(u1 k=0;k<enes;k++) {
+		for(u1 k=0;k<enes && psi_is_alv(protagonista);k++) {
 			ret|=ene_enc(ene[k]);
 		}
 		enes=enemigos_find(ene);
@@ -509,6 +509,7 @@ u1 prot_ord() {
 //prueba
 
 int main() {
+	srand(time(NULL));
 	map_ini();
 	prot_ini();
 	puer_ini();
