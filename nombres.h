@@ -2,7 +2,7 @@
 ============================================================
   Fichero: nombres.h
   Creado: 27-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 05:59:09
+  Ultima Modificacion: lun 29 sep 2025 11:58:59
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -11,7 +11,7 @@
 #define NOMBRES_H
 
 #define NOMLEN 20
-#define NOMBRES 202
+#define NOMBRES 302
 
 #include "entrada.h"
 

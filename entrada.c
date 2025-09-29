@@ -2,7 +2,7 @@
 ============================================================
   Fichero: entrada.c
   Creado: 27-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 11:23:38
+  Ultima Modificacion: lun 29 sep 2025 12:25:55
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -50,10 +50,10 @@ u1 menu_use(Menu m) {
 		if(k==5) puts("");
 		else printf("    ");
 	}
-	puts("");
-	printf("%s ",m.pregunta);
 	u1 rp=0;
+	puts("");
 	while(rp==0 || rp>m.opciones) {
+		printf("%s ",m.pregunta);
 		char str[4];
 		input(3,str);
 		sscanf(str,"%hhi",&rp);

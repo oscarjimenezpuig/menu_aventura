@@ -2,7 +2,7 @@
 ============================================================
   Fichero: enemigo.h
   Creado: 27-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 07:09:22
+  Ultima Modificacion: lun 29 sep 2025 10:48:04
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -12,7 +12,7 @@
 
 #include "puerta.h"
 
-Psi* ene_new(char* nombre,u1 vida);
+Psi* ene_new(u1 id_nombre,u1 vida);
 
 u1 ene_act(Psi* p);
 //actuacion si no esta muerto (en el purgatorio)
@@ -22,5 +22,7 @@ u1 enes_act();
 
 u1 ene_enc(Psi* p);
 //el enemigo encuentra al protagonista
+
+void ene_def();
 
 #endif //ENEMIGO_H

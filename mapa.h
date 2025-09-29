@@ -2,7 +2,7 @@
 ============================================================
   Fichero: mapa.h
   Creado: 25-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 09:21:57
+  Ultima Modificacion: lun 29 sep 2025 10:45:30
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -16,8 +16,8 @@
 
 #include "nombres.h"
 
-#define MAPW 3
-#define MAPH 3
+#define MAPW 10
+#define MAPH 10
 
 #define NORTE 1
 #define SUR 8

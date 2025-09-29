@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 05:47:44
+  Ultima Modificacion: lun 29 sep 2025 12:19:59
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -12,14 +12,15 @@
 Psi psi[PSIS];
 u2 psis=0;
 
-Psi* psi_new(char* n) {
+Psi* psi_new(u1 n) {
 	if(psis<PSIS) {
 		Psi* p=psi+psis;
 		psis++;
-		nom_new(n,&(p->nombre));
+		p->nombre=n;
 		p->contenidos=0;
 		p->oro=0;
 		p->jugador=0;
+		p->ha_luchado=0;
 		return p;
 	}
 	return NULL;
@@ -134,7 +135,7 @@ u1 psi_atak(Psi* a,Psi* b) {
 		printf("El ataque de %s es bueno...\n",nombre[a->nombre]);
 		u1 golpeo=aa-dados;
 		if(arb) {
-			printf("El arma de defensa %s absorve parte del golpe...\n",nombre[arb->nombre]);
+			printf("El arma de defensa %s de %s absorve parte del golpe...\n",nombre[arb->nombre],nombre[b->nombre]);
 			if(golpeo>=arb->duracion) {
 				arb->duracion=0;
 				printf("%s se ha roto...\n",nombre[arb->nombre]);
@@ -143,13 +144,13 @@ u1 psi_atak(Psi* a,Psi* b) {
 				obj_pur(arb);
 				arb->duracion=0;
 			} else {
-				golpeo=0;
 				arb->duracion-=golpeo;
+				golpeo=0;
 			}
 		}
 		if(golpeo) {
-			printf("%s recibe un golpe de %i puntos de %s...\n",nombre[b->nombre],golpeo,nombre[a->nombre]);
 			if(golpeo>b->vida) golpeo=b->vida;
+			printf("%s recibe un golpe de %i puntos de %s...\n",nombre[b->nombre],golpeo,nombre[a->nombre]);
 			b->vida-=golpeo;
 			if(b->vida==0) return psi_die(b);
 			return 1;
@@ -160,7 +161,7 @@ u1 psi_atak(Psi* a,Psi* b) {
 		if(diferencia) {
 			if(ara) {
 				if(diferencia<ara->duracion) {
-					printf("El arma de ataque %s resulta afectada...\n",nombre[ara->nombre]);
+					printf("El arma de ataque %s de %s resulta afectada...\n",nombre[ara->nombre],nombre[a->nombre]);
 					ara->duracion-=diferencia;
 				} else {
 					printf("El arma de ataque %s se ha roto despues del ataque fallido...\n",nombre[ara->nombre]);
@@ -197,6 +198,7 @@ u1 psi_huir(Psi* a,u1 bs,Psi* b[]) {
 		dir=NORTE<<ndir;
 		dir=(dir & sal)?dir:0;
 	}
+	psi_mov(a,dir);
 	return 1;
 }
 

@@ -2,7 +2,7 @@
 ============================================================
   Fichero: objeto.h
   Creado: 25-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 08:56:51
+  Ultima Modificacion: lun 29 sep 2025 11:59:00
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -24,7 +24,7 @@
 #define SALIDA 1
 #define TIENDA 2
 
-#define OBJETOS 100
+#define OBJETOS 200
 
 typedef signed short i2;
 
@@ -46,7 +46,7 @@ typedef struct {
 extern u1 objetos;
 extern Objeto objeto[OBJETOS];
 
-Objeto* obj_new(char* nombre);
+Objeto* obj_new(u2 id_nombre);
 //define un nuevo objeto
 
 void obj_pur(Objeto* o);
@@ -58,11 +58,8 @@ void obj_rnd_pos(Objeto* o);
 void obj_prt(Objeto* o);
 //imprime y describe un objeto
 
-void llav_ini();
-//inicia todas las llaves (3)
-
-void pla_ini();
-//inicia el mapa
+void obj_def();
+//define todos los objetos
 		
 
 #endif //OBJETO_H

@@ -2,17 +2,17 @@
 ============================================================
   Fichero: enemigo.c
   Creado: 27-09-2025
-  Ultima Modificacion: dissabte, 27 de setembre de 2025, 12:51:29
+  Ultima Modificacion: lun 29 sep 2025 14:29:03
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
 
 #include "enemigo.h"
 
-Psi* ene_new(char* n,u1 vida) {
+Psi* ene_new(u1 nn,u1 vida) {
 	Psi* p=NULL;
 	if(vida) {
-		p=psi_new(n);
+		p=psi_new(nn);
 		if(p) p->vida=vida;
 	}
 	return p;
@@ -49,7 +49,8 @@ static u1 coger(Psi* p) {
 
 u1 ene_act(Psi* p) {
 	if(psi_is_alv(p)) {
-		if(!coger(p)) paseo(p);
+		if(p->ha_luchado) p->ha_luchado=0;
+		else if(!coger(p)) paseo(p);
 		return 1;
 	}
 	return 0;
@@ -68,10 +69,42 @@ u1 enes_act() {
 			
 
 u1 ene_enc(Psi* p) {
-	u1 ataque=p->fuerza>protagonista->fuerza || (p->fuerza==protagonista->fuerza && p->habilidad<protagonista->habilidad);
+	u2 enehere=0;
+	for(u1 k=0;k<psis && enehere==0;k++) {
+		Psi* pe=psi+k;
+		if(pe != p && pe->x==p->x && pe->y==p->y && pe->jugador==0) enehere++;
+	}
+	u1 ataque=(enehere>0) || p->fuerza>protagonista->fuerza || (p->fuerza==protagonista->fuerza && p->habilidad<protagonista->habilidad);
 	if(!ataque && protagonista->habilidad>p->habilidad) ataque=rand()%2;
 	Psi* ap[]={protagonista};
 	return (ataque)?psi_atak(p,protagonista):psi_huir(p,1,ap);
 }
 
+typedef struct {
+	char* nombre;
+	u1 fuerza,habilidad,capacidad;
+	u1 vida_minima;
+	u1 cantidad;
+} Raza;
 
+static void raza_new(Raza r) {
+	u2 nn;
+	nom_new(r.nombre,&nn);
+	for(u1 k=0;k<r.cantidad;k++) {
+		u1 dif=9-r.vida_minima;
+		u1 vida=(dif==0)?r.vida_minima:(r.vida_minima)+rand()%dif;
+		Psi* p=ene_new(nn,vida);
+		p->fuerza=r.fuerza;
+		p->habilidad=r.habilidad;
+		p->capacidad=r.capacidad;
+		psi_rnd_pos(p);
+	}
+}
+
+void ene_def() {
+	Raza r[]={{"Rata",1,1,0,1,18},{"Serpiente",2,2,0,1,16},{"Goblin",3,2,1,3,14},{"Orco",5,2,3,4,12},{"Troll",7,0,6,5,6},{"Elfo Negro",6,8,4,9,10},{"Gigante",9,2,5,7,4},{"Dragon",9,9,0,9,1},{"Jinete Negro",9,7,3,9,3},{"Sauron",8,9,3,9,1}};
+	u1 rs=10;
+	for(u1 k=0;k<rs;k++) {
+		raza_new(r[k]);
+	}
+}

@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.h
   Creado: 25-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 06:43:38
+  Ultima Modificacion: lun 29 sep 2025 12:11:20
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -24,8 +24,9 @@ typedef struct {
 	u1 fuerza;
 	u1 habilidad;
 	u1 capacidad;
-	u1 oro;
+	u2 oro;
 	u1 vida;
+	u1 ha_luchado;
 	u1 contenidos;
 	Objeto* contenido[MAXPUN];
 } Psi;
@@ -36,7 +37,7 @@ extern u2 psis;
 extern Psi* protagonista;
 extern u1 quit;
 
-Psi* psi_new(char* nombre);
+Psi* psi_new(u1 nombre);
 
 u1 psi_ins_obj(Psi* psi,Objeto* obj);
 //insertar objeto (independientemente de donde este) no ha de superar capacidad de psi

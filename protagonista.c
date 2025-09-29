@@ -2,7 +2,7 @@
 ============================================================
   Fichero: protagonista.c
   Creado: 25-09-2025
-  Ultima Modificacion: diumenge, 28 de setembre de 2025, 11:23:10
+  Ultima Modificacion: lun 29 sep 2025 12:08:26
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -19,7 +19,9 @@ void prot_ini() {
 	printf("Introduce el nombre del protagonista: ");
 	char n[NOMLEN];
 	input(NOMLEN-1,n);
-	protagonista=psi_new(n);
+	u2 nn;
+	nom_new(n,&nn);
+	protagonista=psi_new(nn);
 	if(protagonista) {
 		char* caract[]={"fuerza","habilidad","capacidad"};
 		u1 points[3];
@@ -57,7 +59,7 @@ void prot_ini() {
 		protagonista->fuerza=points[0];
 		protagonista->habilidad=points[1];
 		protagonista->capacidad=points[2];
-		protagonista->vida=10;
+		protagonista->vida=9;
 		protagonista->jugador=1;
 		psi_rnd_pos(protagonista);
 	}
@@ -68,6 +70,7 @@ static u1 enemigos_find(Psi* enemigo[]) {
 	for(u1 k=0;k<psis;k++) {
 		Psi* p=psi+k;
 		if(p->jugador==0 && p->x==protagonista->x && p->y==protagonista->y) {
+			p->ha_luchado=1;
 			enemigo[enemigos++]=p;
 		}
 	}
@@ -281,6 +284,11 @@ static u1 prot_pla() {
 	return 0;
 }
 
+static u1 prot_mir() {
+	prot_prt();
+	return 1;
+}
+
 static u1 finalizar() {
 	quit=1;
 	return 1;
@@ -292,8 +300,8 @@ static u1 menu_1_accion() {
 	if(!defma) {
 		char* c="Las acciones disponibles son:";
 		char* p="Que quieres hacer?";
-		char* op[]={"Descansar","Inventario","Coger","Dejar","Abrir","Entrar","Mirar plano"};
-		u1 ops=7;
+		char* op[]={"Descansar","Inventario","Coger","Dejar","Abrir","Entrar","Plano","Mirar"};
+		u1 ops=8;
 		ma=menu_new(c,p);
 		for(u1 k=0;k<ops;k++) menu_ins(&ma,op[k]);
 		defma=1;
@@ -314,6 +322,8 @@ static u1 menu_1_accion() {
 			return prot_ent();
 		case 6:
 			return prot_pla();
+		case 7:
+			return prot_mir();
 	}
 	return 0;
 }
@@ -381,8 +391,8 @@ static u1 menu_0() {
 	if(!defmu) {
 		char* c="Que quieres hacer?";
 		char* p="Introduce una opcion:";
-		char* op[]={"Ir","Descansar","Inventario","Coger","Dejar","Abrir","Mirar plano","Cambiar menu","Finalizar"};
-		u1 ops=9;
+		char* op[]={"Ir","Descansar","Inventario","Coger","Dejar","Abrir","Plano","Mirar","Cambiar menu","Finalizar"};
+		u1 ops=10;
 		mu=menu_new(c,p);
 		for(u1 k=0;k<ops;k++) menu_ins(&mu,op[k]);
 		defmu=1;
@@ -404,9 +414,11 @@ static u1 menu_0() {
 		case 6:
 			return prot_pla();
 		case 7:
+			return prot_mir();
+		case 8:
 			tipo_menu=1;
 			return menu_1();
-		case 8:
+		case 9:
 			return finalizar();
 	}
 	return 0;
@@ -446,6 +458,17 @@ static u1 menu_e(u1 enms,Psi* enm[]) {
 	else return psi_huir(protagonista,enms,enm);
 }
 
+static u1 menu_ord() {
+	switch(tipo_menu) {
+		case 0:
+			return menu_0();
+		case 1:
+			return menu_1();
+	}
+	return 0;
+}
+
+
 static u1 prot_enc_ene() {
 	u1 ret=0;
 	Psi* ene[psis];
@@ -454,18 +477,22 @@ static u1 prot_enc_ene() {
 		for(u1 k=0;k<enes;k++) {
 			ret|=ene_enc(ene[k]);
 		}
+		enes=enemigos_find(ene);
 		if(psi_is_alv(protagonista)) {
-			ret|=menu_e(enes,ene);
+			if(enes) ret|=menu_e(enes,ene);
+			else return menu_ord();
 		}
 	} else if(enes==1) {
 		if(ene[0]->vida>protagonista->vida) {
 			ret|=ene_enc(ene[0]);
+			enes=enemigos_find(ene);
 			if(psi_is_alv(protagonista)) {
-				ret|=menu_e(enes,ene);
+				if(enes) ret|=menu_e(enes,ene);
+				else return menu_ord();
 			}
 		} else {
 			ret|=menu_e(enes,ene);
-			if(psi_is_alv(ene[0])) {
+			if(protagonista->x==(*ene)->x && protagonista->y==(*ene)->y) {
 				ret|=ene_enc(ene[0]);
 			}
 		}
@@ -474,54 +501,19 @@ static u1 prot_enc_ene() {
 }
 
 u1 prot_ord() {
-	if(hay_enemigos) {
-		return prot_enc_ene();
-	} else {
-		switch(tipo_menu) {
-			case 0:
-				return menu_0();
-			case 1:
-				return menu_1();
-		}
-	}
-	return 0;
+	if(hay_enemigos) return prot_enc_ene();
+	else return menu_ord();
 }
 
 		
 //prueba
 
-char* noes="Espada";
-char* noco="Cofre";
-
-void obj_def() {
-	Objeto* es=obj_new(noes);
-	es->tipo=ARMA;
-	es->subtipo=ATAQUE;
-	es->plus=1;
-	es->duracion=5;
-	obj_rnd_pos(es);
-	Objeto* te=obj_new(noco);
-	te->tipo=TESORO;
-	te->valor=100;
-	obj_rnd_pos(te);
-}
-
-void psi_def() {
-	Psi* gb=ene_new("Goblin",5);
-	gb->fuerza=3;
-	gb->habilidad=5;
-	gb->capacidad=2;
-	psi_rnd_pos(gb);
-}
-
 int main() {
 	map_ini();
 	prot_ini();
 	puer_ini();
-	llav_ini();
-	pla_ini();
 	obj_def();
-	psi_def();
+	ene_def();
 	while(!quit) {
 		cenefa('=');
 		prot_prt();
