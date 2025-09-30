@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: mar 30 sep 2025 11:19:39
+  Ultima Modificacion: mar 30 sep 2025 14:09:53
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -139,10 +139,13 @@ u1 psi_atak(Psi* a,Psi* b) {
 	printf("%s ataca a %s...\n",nombre[a->nombre],nombre[b->nombre]);
 	Objeto* ara=arma(a,ATAQUE);
 	u1 aa=a->fuerza+((ara!=NULL)?ara->plus:0);
+	if(ara) printf("%s empuña %s.\n",nombre[a->nombre],nombre[ara->nombre]);
 	Objeto* arb=arma(b,DEFENSA);
+	if(arb) printf("%s se defiende con %s.\n",nombre[b->nombre],nombre[arb->nombre]);
 	u1 bb=b->fuerza+((arb!=NULL)?arb->plus:0);
 	u1 tot_a=val_ata_psi(aa,a->vida);
 	u1 tot_b=val_ata_psi(bb,b->vida);
+	if(tot_a==tot_b) tot_a+=1;
 	if(tot_a>tot_b) {
 		printf("El ataque de %s es bueno...\n",nombre[a->nombre]);
 		u1 golpeo=tot_a-tot_b;
