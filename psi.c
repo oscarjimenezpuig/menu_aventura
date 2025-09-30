@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:14:15
+  Ultima Modificacion: dimarts, 30 de setembre de 2025, 05:30:15
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -48,8 +48,8 @@ u1 psi_hav_obj(Psi* p,Objeto* o,u1* pos) {
 	for(u1 n=0;n<p->contenidos;n++) {
 		if(o==p->contenido[n]) {
 			if(pos) *pos=n;
+			return 1;
 		}
-		return 1;
 	}
 	return 0;
 }
@@ -122,6 +122,15 @@ static Objeto* arma(Psi* a,u1 subtipo) {
 	}
 	return aa;
 }
+
+static u1 val_ata_psi(u1 fuerza_total,u1 vida) {
+	u1 maximo=0;
+	for(u1 n=0;n<vida;n++) {
+		u1 ale=(fuerza_total==0)?0:rand()%fuerza_total;
+		maximo=(ale>maximo)?ale:maximo;
+	}
+	return maximo;
+}
 	
 u1 psi_atak(Psi* a,Psi* b) {
 	printf("%s ataca a %s...\n",nombre[a->nombre],nombre[b->nombre]);
@@ -129,11 +138,11 @@ u1 psi_atak(Psi* a,Psi* b) {
 	u1 aa=a->fuerza+((ara!=NULL)?ara->plus:0);
 	Objeto* arb=arma(b,DEFENSA);
 	u1 bb=b->fuerza+((arb!=NULL)?arb->plus:0);
-	u1 total=aa+bb;
-	u1 dados=(total==0)?0:rand()%total;
-	if(dados<aa) {
+	u1 tot_a=val_ata_psi(aa,a->vida);
+	u1 tot_b=val_ata_psi(bb,b->vida);
+	if(tot_a>tot_b) {
 		printf("El ataque de %s es bueno...\n",nombre[a->nombre]);
-		u1 golpeo=aa-dados;
+		u1 golpeo=tot_a-tot_b;
 		if(arb) {
 			printf("El arma de defensa %s de %s absorve parte del golpe...\n",nombre[arb->nombre],nombre[b->nombre]);
 			if(golpeo>=arb->duracion) {
@@ -157,7 +166,7 @@ u1 psi_atak(Psi* a,Psi* b) {
 		} else return 0;
 	} else {
 		printf("El ataque de %s es rechazado por %s...\n",nombre[a->nombre],nombre[b->nombre]);
-		u1 diferencia=dados-bb;
+		u1 diferencia=tot_b-tot_a;
 		if(diferencia) {
 			if(ara) {
 				if(diferencia<ara->duracion) {
@@ -176,10 +185,21 @@ u1 psi_atak(Psi* a,Psi* b) {
 }
 
 
+static u1 val_hui_psi(u1 habilidad,u1 vida) {
+	u1 maximo=0;
+	if(habilidad>0) {
+		for(u1 n=0;n<vida;n++) {
+			u1 ale=rand()%habilidad;
+			if(ale>maximo) maximo=ale;
+		}
+	}
+	return maximo;
+}
+
 static u1 psi_huir_uno(Psi* a,Psi* b) {
-	u1 total=a->habilidad+b->habilidad;
-	u1 dados=(total==0)?0:rand()%total;
-	return dados<=a->habilidad;
+	u1 hab_a=val_hui_psi(a->habilidad,a->vida);
+	u1 hab_b=val_hui_psi(b->habilidad,b->vida);
+	return hab_a>=hab_b;
 }
 
 u1 psi_huir(Psi* a,u1 bs,Psi* b[]) {

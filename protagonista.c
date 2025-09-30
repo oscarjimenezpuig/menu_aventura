@@ -2,7 +2,7 @@
 ============================================================
   Fichero: protagonista.c
   Creado: 25-09-2025
-  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:26:04
+  Ultima Modificacion: dimarts, 30 de setembre de 2025, 05:04:32
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
