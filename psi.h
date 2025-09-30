@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.h
   Creado: 25-09-2025
-  Ultima Modificacion: dimarts, 30 de setembre de 2025, 05:26:38
+  Ultima Modificacion: mar 30 sep 2025 08:53:14
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -36,6 +36,9 @@ extern u2 psis;
 
 extern Psi* protagonista;
 extern u1 quit;
+extern u2 enemigos;
+extern u2 muertos;
+extern Psi* muerto_importante;
 
 Psi* psi_new(u1 nombre);
 

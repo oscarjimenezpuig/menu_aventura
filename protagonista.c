@@ -2,7 +2,7 @@
 ============================================================
   Fichero: protagonista.c
   Creado: 25-09-2025
-  Ultima Modificacion: dimarts, 30 de setembre de 2025, 05:04:32
+  Ultima Modificacion: mar 30 sep 2025 11:08:09
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -120,6 +120,22 @@ void prot_prt() {
 			}
 		}
 		if(!algo) printf("\tNada interesante\n");
+		printf("Ahora mismo tienes %i monedas de oro y",protagonista->oro);
+		if(protagonista->contenidos) {
+			printf(":\n");
+			for(u1 k=0;k<protagonista->contenidos;k++) {
+				printf("\t- ");
+				obj_prt(protagonista->contenido[k]);
+				puts("");
+			}
+			u2 diferencia=protagonista->capacidad-protagonista->contenidos;
+			if(diferencia==0) puts("No puedes llevar nada mas...");
+			else printf("Todavia puedes coger %i objetos mas...\n",diferencia);
+		} else puts(" nada mas...");
+		if(muertos) {
+			printf("Has matado a %i enemigos de los %i iniciales.\n",muertos,enemigos);
+			printf("El enemigo mas importante que has matado es %s.\n",nombre[muerto_importante->nombre]);
+		} else printf("No has matado a ningun enemigo. Todavia quedan %i.\n",enemigos);
 	}
 }
 
@@ -251,21 +267,6 @@ static u1 prot_des() {
 	return 1;
 }
 
-static u1 prot_inv() {
-	printf("Tienes %i monedas de oro y... ",protagonista->oro);
-	if(protagonista->contenidos==0) puts("nada mas.");
-	else {
-		puts("");
-		for(u1 n=0;n<protagonista->contenidos;n++) {
-			printf("\t- ");
-			obj_prt(protagonista->contenido[n]);
-			puts("");
-		}
-		if(protagonista->contenidos==protagonista->capacidad) puts("Ya no puedes llevar nada mas...");
-	}
-	return 1;
-}
-
 static u1 prot_pla() {
 	u1 has_mapa=0;
 	for(u1 k=0;k<protagonista->contenidos;k++) {
@@ -300,8 +301,8 @@ static u1 menu_1_accion() {
 	if(!defma) {
 		char* c="Las acciones disponibles son:";
 		char* p="Que quieres hacer?";
-		char* op[]={"Descansar","Inventario","Coger","Dejar","Abrir","Entrar","Plano","Mirar"};
-		u1 ops=8;
+		char* op[]={"Descansar","Coger","Dejar","Abrir","Entrar","Plano","Mirar"};
+		u1 ops=7;
 		ma=menu_new(c,p);
 		for(u1 k=0;k<ops;k++) menu_ins(&ma,op[k]);
 		defma=1;
@@ -311,18 +312,16 @@ static u1 menu_1_accion() {
 		case 0:
 			return prot_des();
 		case 1:
-			return prot_inv();
-		case 2:
 			return prot_cog();
-		case 3:
+		case 2:
 			return prot_dej();
-		case 4:
+		case 3:
 			return prot_abr();
-		case 5:
+		case 4:
 			return prot_ent();
-		case 6:
+		case 5:
 			return prot_pla();
-		case 7:
+		case 6:
 			return prot_mir();
 	}
 	return 0;
@@ -391,8 +390,8 @@ static u1 menu_0() {
 	if(!defmu) {
 		char* c="Que quieres hacer?";
 		char* p="Introduce una opcion:";
-		char* op[]={"Ir","Descansar","Inventario","Coger","Dejar","Abrir","Plano","Mirar","Cambiar menu","Finalizar"};
-		u1 ops=10;
+		char* op[]={"Ir","Descansar","Coger","Dejar","Abrir","Plano","Mirar","Cambiar menu","Finalizar"};
+		u1 ops=9;
 		mu=menu_new(c,p);
 		for(u1 k=0;k<ops;k++) menu_ins(&mu,op[k]);
 		defmu=1;
@@ -404,21 +403,19 @@ static u1 menu_0() {
 		case 1:
 			return prot_des();
 		case 2:
-			return prot_inv();
-		case 3:
 			return prot_cog();
-		case 4:
+		case 3:
 			return prot_dej();
-		case 5:
+		case 4:
 			return prot_abr();
-		case 6:
+		case 5:
 			return prot_pla();
-		case 7:
+		case 6:
 			return prot_mir();
-		case 8:
+		case 7:
 			tipo_menu=1;
 			return menu_1();
-		case 9:
+		case 8:
 			return finalizar();
 	}
 	return 0;

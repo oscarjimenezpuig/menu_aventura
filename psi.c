@@ -2,7 +2,7 @@
 ============================================================
   Fichero: psi.c
   Creado: 25-09-2025
-  Ultima Modificacion: dimarts, 30 de setembre de 2025, 05:30:15
+  Ultima Modificacion: mar 30 sep 2025 11:19:39
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
@@ -11,6 +11,9 @@
 
 Psi psi[PSIS];
 u2 psis=0;
+
+u2 muertos=0;
+Psi* muerto_importante=NULL;
 
 Psi* psi_new(u1 n) {
 	if(psis<PSIS) {
@@ -222,6 +225,11 @@ u1 psi_huir(Psi* a,u1 bs,Psi* b[]) {
 	return 1;
 }
 
+static u2 psi_sum_car(Psi* p) {
+	if(p) return p->fuerza+p->habilidad+p->capacidad;
+	else return 0;
+}
+
 u1 psi_die(Psi* p) {
 	u2 x=p->x;
 	u2 y=p->y;
@@ -231,6 +239,8 @@ u1 psi_die(Psi* p) {
 		quit=1;
 	} else {
 		printf("%s ha muerto...\n",nombre[p->nombre]);
+		muertos++;
+		if(psi_sum_car(p)>psi_sum_car(muerto_importante)) muerto_importante=p;
 		if(p->oro) {
 			printf("Deja %i monedas de oro que recoges...\n",p->oro);
 			protagonista->oro+=p->oro;

@@ -2,18 +2,23 @@
 ============================================================
   Fichero: enemigo.c
   Creado: 27-09-2025
-  Ultima Modificacion: dilluns, 29 de setembre de 2025, 19:06:11
+  Ultima Modificacion: mar 30 sep 2025 08:51:41
   oSCAR jIMENEZ pUIG                                       
 ============================================================
 */
 
 #include "enemigo.h"
 
+u2 enemigos=0;
+
 Psi* ene_new(u1 nn,u1 vida) {
 	Psi* p=NULL;
 	if(vida) {
 		p=psi_new(nn);
-		if(p) p->vida=vida;
+		if(p) {
+			p->vida=vida;
+			enemigos++;
+		}
 	}
 	return p;
 }
